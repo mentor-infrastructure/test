@@ -35,7 +35,7 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        script {
+        container('helm') {
           sh "helm upgrade ${env.IMAGE_NAME} pipeline"
         }
       }
