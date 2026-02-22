@@ -18,11 +18,11 @@ pipeline {
 
     stage('Build & Push') {
       steps {
-        dockerImage = docker.build dockerimagename
-        dockerImage.push("latest")
+        dockerImage = docker.build("${IMAGE}:${IMAGE_TAG}")
         docker.withRegistry('https://ghcr.io', GHCR_CRED_ID) {
           dockerImage.push("${IMAGE_TAG}")
-        }      }
+        }
+      }
     }
   }
 }
