@@ -32,6 +32,14 @@ pipeline {
         }
       }
     }
+
+    stage('Deploy') {
+      steps {
+        script {
+          sh "helm upgrade ${env.IMAGE_NAME} pipeline"
+        }
+      }
+    }
   }
 
   post {
