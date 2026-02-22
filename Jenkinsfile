@@ -24,8 +24,10 @@ pipeline {
       steps {
         script {
           dockerImage = docker.build("${IMAGE}:${IMAGE_TAG}")
-          docker.withRegistry('https://ghcr.io', GHCR_CRED_ID) {
-            dockerImage.push("${IMAGE_TAG}")
+          docker.withTool('docker'){
+            docker.withRegistry('https://ghcr.io', GHCR_CRED_ID) {
+              dockerImage.push("${IMAGE_TAG}")
+            }
           }
         }
       }
@@ -35,7 +37,6 @@ pipeline {
   post {
     cleanup {
       sh "docker rmi ${IMAGE}:${IMAGE_TAG} || true"
-      sh "docker rmi ${IMAGE}:latest || true"
     }
     success { echo "Pushed ${IMAGE}:${IMAGE_TAG} and deployed" }
   }
