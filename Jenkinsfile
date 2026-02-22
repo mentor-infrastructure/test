@@ -27,5 +27,13 @@ pipeline {
       }
     }
   }
+
+  post {
+    cleanup {
+      sh "docker rmi ${IMAGE}:${IMAGE_TAG} || true"
+      sh "docker rmi ${IMAGE}:latest || true"
+    }
+    success { echo "Pushed ${IMAGE}:${IMAGE_TAG} and deployed" }
+  }
 }
 
