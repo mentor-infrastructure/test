@@ -15,8 +15,8 @@ pipeline {
     stage('Build & Push') {
       steps {
         sh '''
-          docker build -t ghcr.io/mentor-infrastructure/test:${BUILD_NUMBER} .
-          docker push ghcr.io/mentor-infrastructure/test:${BUILD_NUMBER}
+          /kaniko/executor --context $WORKSPACE --dockerfile $WORKSPACE/Dockerfile \
+            --destination ghcr.io/mentor-infrastructure/test:${BUILD_NUMBER} --cleanup
         '''
       }
     }
