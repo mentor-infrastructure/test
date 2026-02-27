@@ -4,7 +4,8 @@ pipeline {
   environment {
     GITHUB_OWNER = "mentor-infrastructure"
     IMAGE_NAME   = "test"
-    IMAGE        = "ghcr.io/${GITHUB_OWNER}/${IMAGE_NAME}"
+    REGISTRY     = "ghcr.io"
+    IMAGE        = "${REGISTRY}/${GITHUB_OWNER}/${IMAGE_NAME}"
     IMAGE_TAG    = "${env.BUILD_NUMBER ?: 'latest'}"
     GHCR_CRED_ID = "github"
   }
@@ -22,12 +23,23 @@ pipeline {
 
     stage('Build & Push') {
       steps {
-        script {
-          dockerImage = docker.build("${IMAGE}:${IMAGE_TAG}")
-          docker.withTool('docker'){
-            docker.withRegistry('https://ghcr.io', GHCR_CRED_ID) {
-              dockerImage.push("${IMAGE_TAG}")
-            }
+        container('kaniko') {
+          script {
+            sh '''
+                /kaniko/executor \
+                  --context dir:///home/jenkins/agent/workspace/${JOB_NAME} \
+                  --dockerfile Dockerfile \
+                  --destination ${IMAGE}:${TAG} \
+                  --cache=true \
+                  --cache-dir=/kaniko/cache \
+                  --verbosity=info
+            '''
+//            dockerImage = docker.build("${IMAGE}:${IMAGE_TAG}")
+//            docker.withTool('docker'){
+//              docker.withRegistry('https://ghcr.io', GHCR_CRED_ID) {
+//                dockerImage.push("${IMAGE_TAG}")
+//              }
+//            }
           }
         }
       }
