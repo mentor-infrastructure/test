@@ -23,23 +23,23 @@ pipeline {
 
     stage('Build & Push') {
       steps {
-        container('kaniko') {
+        container('docker') {
           script {
-            sh '''
-                /kaniko/executor \
-                  --context dir:///home/jenkins/agent/workspace/${JOB_NAME} \
-                  --dockerfile Dockerfile \
-                  --destination ${IMAGE}:${TAG} \
-                  --cache=true \
-                  --cache-dir=/kaniko/cache \
-                  --verbosity=info
-            '''
-//            dockerImage = docker.build("${IMAGE}:${IMAGE_TAG}")
-//            docker.withTool('docker'){
-//              docker.withRegistry('https://ghcr.io', GHCR_CRED_ID) {
-//                dockerImage.push("${IMAGE_TAG}")
-//              }
-//            }
+            // sh '''
+            //     /kaniko/executor \
+            //       --context dir:///home/jenkins/agent/workspace/${JOB_NAME} \
+            //       --dockerfile Dockerfile \
+            //       --destination ${IMAGE}:${TAG} \
+            //       --cache=true \
+            //       --cache-dir=/kaniko/cache \
+            //       --verbosity=info
+            // '''
+            dockerImage = docker.build("${IMAGE}:${IMAGE_TAG}")
+            docker.withTool('docker'){
+              docker.withRegistry('https://ghcr.io', GHCR_CRED_ID) {
+                dockerImage.push("${IMAGE_TAG}")
+              }
+            }
           }
         }
       }
