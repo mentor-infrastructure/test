@@ -49,7 +49,7 @@ pipeline {
     stage('Deploy') {
       steps {
         container('helm') {
-          sh "helm upgrade ${env.IMAGE_NAME} pipeline"
+          sh "helm upgrade --install ${env.IMAGE_NAME} pipeline"
         }
       }
     }
