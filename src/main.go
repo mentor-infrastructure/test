@@ -12,6 +12,7 @@ func handle(c *fiber.Ctx) error {
 
 func main() {
 	app := fiber.New()
+	log.Println("Starting server on :8000...")
 	app.Get("/", handle)
 	log.Fatal(app.Listen(":8000"))
 }
