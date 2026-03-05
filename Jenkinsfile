@@ -7,7 +7,7 @@ pipeline {
     REGISTRY     = "ghcr.io"
     IMAGE        = "${REGISTRY}/${GITHUB_OWNER}/${IMAGE_NAME}"
     IMAGE_TAG    = "${env.BUILD_NUMBER ?: 'latest'}"
-    GHCR_CRED_ID = "github"
+    GHCR_CRED_ID = "316e92cf-8ae2-4c3a-9f49-66583f097444"
   }
 
   tools {
