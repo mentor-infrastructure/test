@@ -36,8 +36,9 @@ pipeline {
             // '''
             dockerImage = docker.build("${IMAGE}:${IMAGE_TAG}")
             docker.withTool('docker'){
-              docker.withRegistry('https://ghcr.io', GHCR_CRED_ID) {
+              docker.withRegistry('https://ghcr.io', "${GHCR_CRED_ID}") {
                 dockerImage.push("${IMAGE_TAG}")
+                dockerImage.push("latest")
               }
             }
           }
